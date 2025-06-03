@@ -9,6 +9,16 @@ export const projectSchema = z.object({
   description: z.string()
 });
 
+
+export const dashboardProjectSchema = z.array(
+  projectSchema.pick({
+    _id: true,
+    projectName: true,
+    clientName: true,
+    description: true
+  })
+)
+
 // Generar el tipo de datos a partir del esquema
 export type Project = z.infer<typeof projectSchema>;
 export type ProjectFormData = Pick<Project, 'projectName' | 'clientName' | 'description'>;
