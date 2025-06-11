@@ -1,14 +1,61 @@
 import { Fragment } from 'react';
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import TaskForm from './TaskForm';
+import { useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import type { TaskFormData } from '@/types';
+import { createtask } from '@/api/TaskApi';
+import { toast } from 'react-toastify';
+
+
+
 
 export default function AddTaskModal() {
+
+  // Ver si el modal existe
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const modalTasks = queryParams.get('newTask');
   const show = modalTasks ? true : false
 
+  // Obtener projectId
+  const params = useParams();
+  const projectId = params.projectId!;
+
+  const intialValues: TaskFormData = {
+    name: '',
+    description: ''
+  }
+
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({ defaultValues: intialValues });
+
+  const queryClient = useQueryClient();
+
+
+  const { mutate } = useMutation({
+    mutationFn: createtask,
+    onError: (error) => {
+      toast.error(error.message)
+
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['editProject', projectId] })
+      toast.success(data)
+      reset()
+      navigate(location.pathname, { replace: true })
+    }
+  })
+
+  const handleCreateTask = (formData: TaskFormData) => {
+    const data = {
+      formData,
+      projectId
+    }
+    mutate(data);
+
+  }
 
   return (
     <>
@@ -48,6 +95,21 @@ export default function AddTaskModal() {
                   <p className="text-xl font-bold">Llena el formulario y crea  {''}
                     <span className="text-fuchsia-600">una tarea</span>
                   </p>
+
+                  <form
+                    className='mt-10 space-y-3'
+                    onSubmit={handleSubmit(handleCreateTask)}
+                  >
+                    <TaskForm
+                      register={register}
+                      errors={errors}
+                    />
+                    <input
+                      type="submit"
+                      value={'Guardar tarea'}
+                      className='bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white uppercase font-bold cursor-pointer transition-colors'
+                    />
+                  </form>
 
                 </DialogPanel>
               </TransitionChild>
