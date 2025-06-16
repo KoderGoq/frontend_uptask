@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { authenticateUser } from '@/api/AuthApi';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginView() {
 
@@ -14,13 +15,15 @@ export default function LoginView() {
   }
   const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues })
 
+  const navigate = useNavigate();
+
   const { mutate } = useMutation({
     mutationFn: authenticateUser,
     onError: (error) => {
       toast.error(error.message);
     },
-    onSuccess: (data) => {
-      toast.success(data);
+    onSuccess: () => {
+      navigate('/')
     }
   })
 
