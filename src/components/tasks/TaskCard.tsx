@@ -39,7 +39,7 @@ const TaskCard = ({ task, canEdit }: TaskCardProps) => {
       <div className='min-w-0 flex flex-col gap-y-4'>
         <button
           type='button'
-          className='text-xl font-bold text-slate-600 text-left'
+          className='text-xl font-bold text-slate-600 text-left cursor-pointer'
           onClick={() => navigate(location.pathname + `?viewTask=${task._id}`)}
         >{task.name}</button>
         <p className='text-slate-500'>{task.description}</p>
@@ -60,7 +60,7 @@ const TaskCard = ({ task, canEdit }: TaskCardProps) => {
               <MenuItem>
                 <button
                   type='button'
-                  className='block px-3 py-1 text-sm leading-6 text-gray-900'
+                  className='block px-3 py-1 text-sm leading-6 text-gray-900 cursor-pointer'
                   onClick={() => navigate(location.pathname + `?viewTask=${task._id}`)}
                 >
                   Ver Tarea
@@ -71,7 +71,7 @@ const TaskCard = ({ task, canEdit }: TaskCardProps) => {
                   <MenuItem>
                     <button
                       type='button'
-                      className='block px-3 py-1 text-sm leading-6 text-gray-900'
+                      className='block px-3 py-1 text-sm leading-6 text-gray-900 cursor-pointer'
                       onClick={() => navigate(location.pathname + `?editTask=${task._id}`)}>
                       Editar Tarea
                     </button>
@@ -80,7 +80,7 @@ const TaskCard = ({ task, canEdit }: TaskCardProps) => {
                   <MenuItem>
                     <button
                       type='button'
-                      className='block px-3 py-1 text-sm leading-6 text-red-500'
+                      className='block px-3 py-1 text-sm leading-6 text-red-500 cursor-pointer'
                       onClick={() => mutate({ projectId, taskId: task._id })}
                     >
                       Eliminar Tarea
