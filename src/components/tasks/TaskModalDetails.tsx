@@ -116,7 +116,7 @@ export default function TaskModalDetails() {
                     <label className='font-bold'>Estado Actual:</label>
                     <select
                       className='w-full p-3 bg-white border border-gray-300'
-                      defaultValue={data.status}
+                      value={data.status}
                       onChange={handleChange}
                     >
                       {Object.entries(statusTranslations).map(([key, value]) => (
